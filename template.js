@@ -18,7 +18,7 @@ exports.notes = 'This template tries to guess file and directory paths, but ' +
   'it exits with errors, edit the file!_';
 
 // Any existing file or directory matching this wildcard will cause a warning.
-exports.warnOn = 'Gruntfile.js,package.json,.jshintrc';
+exports.warnOn = [ 'Gruntfile.js', 'package.json', '.jshintrc'];
 
 // The actual init template.
 exports.template = function(grunt, init, done) {
