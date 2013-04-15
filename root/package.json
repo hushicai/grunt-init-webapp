@@ -5,17 +5,13 @@
   "devDependencies": {
     "grunt": "~0.4.0",
     "grunt-contrib-copy": "~0.4.0",
-    "grunt-contrib-uglify": "~0.1.1",
     "grunt-contrib-jshint": "~0.1.1",
-    "grunt-contrib-cssmin": "~0.4.1",
     "grunt-contrib-connect": "0.1.2",
     "grunt-contrib-clean": "0.4.0",
     "grunt-contrib-watch": "~0.3.1",
-    "grunt-mocha": "~0.2.2",
+    "grunt-proxy": "git://github.com/hushicai/grunt-proxy.git",
     "matchdep": "~0.1.1"{% if(cgi) { %}{%= ','%}
-    "gateway": "git://github.com/hushicai/gateway.git"{% } %}{% if(proxy) { %}{%= ',' %}
-    "grunt-proxy": "0.0.1"
-    {% } %}
+    "gateway": "git://github.com/hushicai/gateway.git"{% } %}
   },
   "engines": {
     "node": ">=0.10.0"

@@ -18,7 +18,7 @@ module.exports = function (grunt) {
     // configurable paths
     var yeomanConfig = {
         app: 'app',
-        dist: 'dist'
+        dist: 'release'
     };
 
     grunt.initConfig({
@@ -48,18 +48,28 @@ module.exports = function (grunt) {
                 // change this to '0.0.0.0' to access the server from outside
                 hostname: '0.0.0.0'
             },
-            server: {
+            // local server
+            local: {
                 options: {
                     port: 9000,
                     middleware: function (connect, options) {
-                        return [{% if(cgi) { %}
-                            // cgi middleware...
-                            {% } %}
+                        return [
+                            connect.favicon('app/favicon.icon'),
+                            mountFolder(connect, 'app'){% if(cgi) { %}{%= ","%}
+                            cgi('app', {
+                                '.php': {
+                                    'cgi': '/usr/local/php2/bin/php-cgi',
+                                    'rules': {
+                                        // rewrite rules for !file and !dir
+                                    }
+                                }
+                            }){% } %}
                         ];
                     },
                 }
-            }{% if(proxy) { %}{%= ','%}
-            server2: {
+            },
+            // cdn server
+            cdn: {
                 options: {
                     port: 9001,
                     middleware: function(connect, options) {
@@ -68,37 +78,21 @@ module.exports = function (grunt) {
                         ];   
                     }
                 }
-            }{% } %}
-        }{% if(proxy){ %}{%= ','%}
+            }
+        },
         proxy: {
             options: {
                 port: 80,
                 router: {
-                    //routers...
+                    'localhost': '0.0.0.0:9000',
+                    'e.sinajs.cn': '0.0.0.0:9001'
                 }
             },
             start: {}
-        },{% } %}
+        },
         clean: {
             dist: ['.tmp', '<%= yeoman.dist %>/*'],
             server: '.tmp'
-        },
-        mocha: {
-            all: {
-                options: {
-                    run: true
-                }
-            }
-        },
-        uglify: {
-            dist: {
-                files: {  }
-            }
-        },
-        cssmin: {
-            dist: {
-                files: { }
-            }
         },
         copy: {
             dist: {
@@ -116,31 +110,10 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('server', function (target) {
-        grunt.task.run([
-            'clean:server',
-            'connect',{% if(proxy) { %}
-            'proxy',{% } %}
-            'watch'
-        ]);
-    });
-
-    grunt.registerTask('test', [
-        'clean:server',
-        'connect:test',
-        'mocha'
-    ]);
-
-    grunt.registerTask('build', [
-        'clean:dist',
-        'cssmin',
-        'uglify',
-        'copy',
-    ]);
-
     grunt.registerTask('default', [
-        'jshint',
-        'test',
-        'build'
+        'clean:server',
+        'connect',
+        'proxy',
+        'watch'
     ]);
 };

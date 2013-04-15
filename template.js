@@ -31,16 +31,9 @@ exports.template = function(grunt, init, done) {
         message: 'Is cgi support?',
         default: 'Y/N',
         warning: 'whether the project serve cgi scripts.'
-    },
-    {
-        name: 'proxy',
-        message: 'Is grunt proxy support?',
-        default: 'Y/N',
-        warning: 'if the project has more than one sever, you may want it.'
     }
   ], function(err, props) {
     props.cgi = /y/i.test(props.cgi);
-    props.proxy = /y/i.test(props.proxy);
     // Find the first `preferred` item existing in `arr`.
     function prefer(arr, preferred) {
       for (var i = 0; i < preferred.length; i++) {
